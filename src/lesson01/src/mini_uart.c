@@ -49,6 +49,17 @@ void uart_init ( void )
 	put32(AUX_MU_IER_REG,0);                //Disable receive and transmit interrupts
 	put32(AUX_MU_LCR_REG,3);                //Enable 8 bit mode
 	put32(AUX_MU_MCR_REG,0);                //Set RTS line to be always high
+	/*
+	  There are only certain baud rates supported by a given system.
+	  The relation between baud rate and the register value:
+	     baudrate = system_clock_freq / (8 * ( baudrate_reg + 1 ))
+
+	  system_clock_freq = 250 MHz
+	  Example Mappings:
+	      Baud Rate		Register Value
+		   115200            270
+		    9600            3254
+	*/
 	put32(AUX_MU_BAUD_REG,270);             //Set baud rate to 115200
 
 	put32(AUX_MU_CNTL_REG,3);               //Finally, enable transmitter and receiver
